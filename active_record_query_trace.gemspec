@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.homepage      = 'https://github.com/brunofacca/active-record-query-trace'
   s.files         = Dir['lib/**/*']
   s.license       = 'MIT'
-  s.required_ruby_version = '>= 2.4', '< 4.0'
-  s.add_development_dependency 'activerecord', '>= 4.0.0'
+  s.required_ruby_version = '>= 2.3.3', '< 4.0'
+  s.add_development_dependency 'activerecord', '~> 5.2'
   s.add_development_dependency 'pry', '~> 0.13.0'
   s.add_development_dependency 'pry-byebug', '~> 3.9.0'
   s.add_development_dependency 'rspec', '>= 3.8.0'
