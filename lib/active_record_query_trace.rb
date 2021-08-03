@@ -63,7 +63,7 @@ module ActiveRecordQueryTrace
 
       setup_backtrace_cleaner unless ActiveRecordQueryTrace.backtrace_cleaner
 
-      trace = fully_formatted_trace # Memoize
+      trace = fully_formatted_trace(payload) # Memoize
       debug(trace) unless trace.blank?
     end
 
@@ -101,8 +101,8 @@ module ActiveRecordQueryTrace
       payload[:sql] !~ /INSERT|UPDATE|DELETE/
     end
 
-    def fully_formatted_trace
-      cleaned_trace = clean_trace(original_trace)
+    def fully_formatted_trace(event_payload)
+      cleaned_trace = clean_trace(original_trace, event_payload)
       return if cleaned_trace.blank?
       stringified_trace = BACKTRACE_PREFIX + lines_to_display(cleaned_trace).join("\n" + INDENTATION)
       colorize_text(stringified_trace)
@@ -122,7 +122,7 @@ module ActiveRecordQueryTrace
     end
 
     # rubocop:disable Metrics/MethodLength
-    def clean_trace(full_trace)
+    def clean_trace(full_trace, event_payload)
       case ActiveRecordQueryTrace.level
       when :full
         trace = full_trace
@@ -132,7 +132,7 @@ module ActiveRecordQueryTrace
         unless ActiveRecordQueryTrace.backtrace_cleaner
           raise 'Configure your backtrace cleaner first via ActiveRecordQueryTrace.backtrace_cleaner = MyCleaner'
         end
-        trace = ActiveRecordQueryTrace.backtrace_cleaner.call(full_trace)
+        trace = ActiveRecordQueryTrace.backtrace_cleaner.call(full_trace, event_payload)
       else
         raise 'Invalid ActiveRecordQueryTrace.level value ' \
           "#{ActiveRecordQueryTrace.level}. Should be :full, :rails, or :app."
