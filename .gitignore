@@ -1,4 +1,6 @@
 .byebug_history
+.idea
+.ruby-version
 active_record_query_trace-*.gem
 coverage/
 Gemfile.lock
